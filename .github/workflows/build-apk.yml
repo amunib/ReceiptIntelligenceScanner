@@ -25,35 +25,22 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      # ── 3. Download Gradle wrapper JAR (if missing) ───────────────────────────
-      - name: Ensure gradle-wrapper.jar exists
-        run: |
-          JAR="gradle/wrapper/gradle-wrapper.jar"
-          if [ ! -f "$JAR" ]; then
-            echo "Downloading gradle-wrapper.jar …"
-            mkdir -p gradle/wrapper
-            curl -sL \
-              "https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar" \
-              -o "$JAR"
-            echo "✅ Downloaded $JAR ($(du -sh $JAR | cut -f1))"
-          else
-            echo "gradle-wrapper.jar already present."
-          fi
+      # ── 3. Set up Gradle (handles wrapper + caching) ──────────────────────────
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
 
       # ── 4. Build ─────────────────────────────────────────────────────────────
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Assemble release APK
-        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        run: gradle assembleRelease
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g"
 
       # ── 5. Self-sign with an ephemeral keystore ───────────────────────────────
-      #     Produces a fully installable APK with no repo secrets required.
       - name: zipalign + sign APK
         run: |
-          # Generate a self-signed keystore (valid 10 000 days)
+          # Generate a self-signed keystore (valid 10 000 days, no secrets needed)
           keytool -genkeypair -v \
             -keystore debug-release.jks \
             -alias release \
@@ -70,6 +57,9 @@ jobs:
           SIGNED="$APK_DIR/app-release.apk"
           BUILD_TOOLS="${ANDROID_HOME}/build-tools/$(ls ${ANDROID_HOME}/build-tools | sort -V | tail -1)"
 
+          echo "Using build-tools: $BUILD_TOOLS"
+          ls "$APK_DIR"
+
           ${BUILD_TOOLS}/zipalign -v 4 "$UNSIGNED" "$ALIGNED"
           ${BUILD_TOOLS}/apksigner sign \
             --ks debug-release.jks \
@@ -79,7 +69,7 @@ jobs:
             --out "$SIGNED" \
             "$ALIGNED"
 
-          echo "✅ Signed APK ready:"
+          echo "✅ Signed APK:"
           ls -lh "$APK_DIR"
 
       # ── 6. Upload artifact ────────────────────────────────────────────────────
