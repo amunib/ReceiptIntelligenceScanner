@@ -1,0 +1,26 @@
+# Built outputs
+*.apk
+*.aab
+*.aar
+*.class
+
+# Gradle caches
+.gradle/
+build/
+app/build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+
+# Local config (machine-specific)
+local.properties
+keystore.jks
+*.keystore
+
+# Kotlin / Java byte-code
+*.jar
+
+# OS files
+Thumbs.db

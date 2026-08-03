@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ماسح الإيصالات الذكي</string>
+
+    <string name="nav_dashboard">لوحة التحكم</string>
+    <string name="nav_scan">مسح</string>
+    <string name="nav_import">استيراد</string>
+    <string name="nav_history">السجل</string>
+    <string name="nav_export">تصدير</string>
+
+    <string name="dashboard_total_receipts">إجمالي الإيصالات</string>
+    <string name="dashboard_total_sales">إجمالي المبيعات</string>
+    <string name="dashboard_total_vat">إجمالي ضريبة القيمة المضافة</string>
+    <string name="dashboard_recent">أحدث الإيصالات المعالجة</string>
+    <string name="dashboard_empty">لا توجد إيصالات بعد. اضغط مسح أو استيراد للبدء.</string>
+
+    <string name="scan_title">مسح إيصال</string>
+    <string name="scan_camera_permission_required">إذن الكاميرا مطلوب لمسح الإيصالات.</string>
+    <string name="scan_grant_permission">منح الإذن</string>
+    <string name="scan_capture">التقاط</string>
+    <string name="scan_batch_mode">وضع الدفعات</string>
+    <string name="scan_batch_mode_hint">استمر في الالتقاط دون مغادرة الكاميرا، ثم راجع كل الصور لاحقًا.</string>
+    <string name="scan_adjust_crop">تعديل الاقتصاص</string>
+    <string name="scan_confirm">استخدام الصورة</string>
+    <string name="scan_retake">إعادة الالتقاط</string>
+
+    <string name="import_title">استيراد ملفات</string>
+    <string name="import_images">استيراد صور</string>
+    <string name="import_pdf">استيراد PDF</string>
+    <string name="import_txt">استيراد إيصال نصي</string>
+    <string name="import_selected_count">تم اختيار %1$d ملف(ات)</string>
+    <string name="import_start">بدء المعالجة</string>
+
+    <string name="processing_title">معالجة الإيصالات</string>
+    <string name="processing_current">معالجة %1$d من %2$d</string>
+    <string name="processing_success">ناجح: %1$d</string>
+    <string name="processing_failed">فشل: %1$d</string>
+    <string name="processing_done">تم</string>
+    <string name="processing_view_results">عرض النتائج</string>
+    <string name="processing_cancel">إلغاء</string>
+
+    <string name="history_title">سجل الإيصالات</string>
+    <string name="history_search_hint">ابحث برقم الإيصال، البائع، الرقم الضريبي…</string>
+    <string name="history_empty">لا توجد إيصالات مطابقة لبحثك.</string>
+    <string name="history_duplicate_badge">تكرار محتمل</string>
+    <string name="history_delete">حذف</string>
+
+    <string name="export_title">تصدير</string>
+    <string name="export_csv">تصدير كـ CSV</string>
+    <string name="export_excel">تصدير كـ Excel</string>
+    <string name="export_pdf_report">تصدير تقرير PDF</string>
+    <string name="export_choose_folder">اختر مجلد التصدير</string>
+    <string name="export_share">مشاركة</string>
+    <string name="export_success">تم تصدير %1$d إيصال إلى %2$s</string>
+    <string name="export_excel_unavailable">يتطلب تصدير Excel وحدة اختيارية. راجع ملف README.</string>
+
+    <string name="settings_dark_mode">الوضع الداكن</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_backup">نسخ احتياطي لقاعدة البيانات</string>
+    <string name="settings_restore">استعادة قاعدة البيانات</string>
+
+    <string name="common_cancel">إلغاء</string>
+    <string name="common_save">حفظ</string>
+    <string name="common_delete">حذف</string>
+    <string name="common_error_generic">حدث خطأ ما. يرجى المحاولة مرة أخرى.</string>
+</resources>

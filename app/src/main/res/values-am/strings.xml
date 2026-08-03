@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">የደረሰኝ መረጃ ስካነር</string>
+
+    <string name="nav_dashboard">ዳሽቦርድ</string>
+    <string name="nav_scan">ስካን</string>
+    <string name="nav_import">አስገባ</string>
+    <string name="nav_history">ታሪክ</string>
+    <string name="nav_export">ላክ</string>
+
+    <string name="dashboard_total_receipts">ጠቅላላ ደረሰኞች</string>
+    <string name="dashboard_total_sales">ጠቅላላ ሽያጭ</string>
+    <string name="dashboard_total_vat">ጠቅላላ ተ.እ.ታ</string>
+    <string name="dashboard_recent">በቅርቡ የተስተናገዱ</string>
+    <string name="dashboard_empty">እስካሁን ደረሰኝ የለም። ለመጀመር ስካን ወይም አስገባ ይንኩ።</string>
+
+    <string name="scan_title">ደረሰኝ ስካን አድርግ</string>
+    <string name="scan_camera_permission_required">ደረሰኞችን ለመቃኘት የካሜራ ፈቃድ ያስፈልጋል።</string>
+    <string name="scan_grant_permission">ፈቃድ ስጥ</string>
+    <string name="scan_capture">ፎቶ አንሳ</string>
+    <string name="scan_batch_mode">የቡድን ሁነታ</string>
+    <string name="scan_batch_mode_hint">ካሜራውን ሳትለቁ ፎቶ ማንሳት ይቀጥሉ፤ በኋላ ሁሉንም ይገምግሙ።</string>
+    <string name="scan_adjust_crop">ቅርጽ አስተካክል</string>
+    <string name="scan_confirm">ፎቶውን ተጠቀም</string>
+    <string name="scan_retake">እንደገና አንሳ</string>
+
+    <string name="import_title">ፋይሎችን አስገባ</string>
+    <string name="import_images">ምስሎችን አስገባ</string>
+    <string name="import_pdf">PDF አስገባ</string>
+    <string name="import_txt">የጽሑፍ ደረሰኝ አስገባ</string>
+    <string name="import_selected_count">%1$d ፋይል(ሎች) ተመርጠዋል</string>
+    <string name="import_start">ማስኬድ ጀምር</string>
+
+    <string name="processing_title">ደረሰኞችን በማስኬድ ላይ</string>
+    <string name="processing_current">%1$d ከ %2$d በማስኬድ ላይ</string>
+    <string name="processing_success">የተሳካ፦ %1$d</string>
+    <string name="processing_failed">ያልተሳካ፦ %1$d</string>
+    <string name="processing_done">ተጠናቋል</string>
+    <string name="processing_view_results">ውጤቶችን ይመልከቱ</string>
+    <string name="processing_cancel">ሰርዝ</string>
+
+    <string name="history_title">የደረሰኝ ታሪክ</string>
+    <string name="history_search_hint">በደረሰኝ ቁጥር፣ በሻጭ፣ በቲን…</string>
+    <string name="history_empty">ከፍለጋዎ ጋር የሚዛመድ ደረሰኝ የለም።</string>
+    <string name="history_duplicate_badge">ሊደገም የሚችል</string>
+    <string name="history_delete">ሰርዝ</string>
+
+    <string name="export_title">ላክ</string>
+    <string name="export_csv">እንደ CSV ላክ</string>
+    <string name="export_excel">እንደ Excel ላክ</string>
+    <string name="export_pdf_report">የPDF ሪፖርት ላክ</string>
+    <string name="export_choose_folder">የመላኪያ ማህደር ይምረጡ</string>
+    <string name="export_share">አጋራ</string>
+    <string name="export_success">%1$d ደረሰኞች ወደ %2$s ተልከዋል</string>
+    <string name="export_excel_unavailable">የExcel መላክ ተጨማሪ ሞጁል ይፈልጋል። በREADME ውስጥ ይመልከቱ።</string>
+
+    <string name="settings_dark_mode">ጨለማ ገጽታ</string>
+    <string name="settings_language">ቋንቋ</string>
+    <string name="settings_backup">የመረጃ ቋት ምትኬ</string>
+    <string name="settings_restore">የመረጃ ቋት መልስ</string>
+
+    <string name="common_cancel">ይቅር</string>
+    <string name="common_save">አስቀምጥ</string>
+    <string name="common_delete">ሰርዝ</string>
+    <string name="common_error_generic">ችግር ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።</string>
+</resources>

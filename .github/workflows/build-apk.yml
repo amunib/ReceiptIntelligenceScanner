@@ -1,0 +1,92 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ───────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Java 17 ───────────────────────────────────────────────────────────
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      # ── 3. Download Gradle wrapper JAR (if missing) ───────────────────────────
+      - name: Ensure gradle-wrapper.jar exists
+        run: |
+          JAR="gradle/wrapper/gradle-wrapper.jar"
+          if [ ! -f "$JAR" ]; then
+            echo "Downloading gradle-wrapper.jar …"
+            mkdir -p gradle/wrapper
+            curl -sL \
+              "https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar" \
+              -o "$JAR"
+            echo "✅ Downloaded $JAR ($(du -sh $JAR | cut -f1))"
+          else
+            echo "gradle-wrapper.jar already present."
+          fi
+
+      # ── 4. Build ─────────────────────────────────────────────────────────────
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Assemble release APK
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g"
+
+      # ── 5. Self-sign with an ephemeral keystore ───────────────────────────────
+      #     Produces a fully installable APK with no repo secrets required.
+      - name: zipalign + sign APK
+        run: |
+          # Generate a self-signed keystore (valid 10 000 days)
+          keytool -genkeypair -v \
+            -keystore debug-release.jks \
+            -alias release \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass android \
+            -keypass android \
+            -dname "CN=ReceiptIntel, OU=Dev, O=Dev, L=Addis, S=Addis, C=ET"
+
+          APK_DIR="app/build/outputs/apk/release"
+          UNSIGNED="$APK_DIR/app-release-unsigned.apk"
+          ALIGNED="$APK_DIR/app-release-aligned.apk"
+          SIGNED="$APK_DIR/app-release.apk"
+          BUILD_TOOLS="${ANDROID_HOME}/build-tools/$(ls ${ANDROID_HOME}/build-tools | sort -V | tail -1)"
+
+          ${BUILD_TOOLS}/zipalign -v 4 "$UNSIGNED" "$ALIGNED"
+          ${BUILD_TOOLS}/apksigner sign \
+            --ks debug-release.jks \
+            --ks-pass pass:android \
+            --key-pass pass:android \
+            --ks-key-alias release \
+            --out "$SIGNED" \
+            "$ALIGNED"
+
+          echo "✅ Signed APK ready:"
+          ls -lh "$APK_DIR"
+
+      # ── 6. Upload artifact ────────────────────────────────────────────────────
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexa-finance-release-apk
+          path: app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 30

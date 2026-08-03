@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Receipt Intelligence Scanner</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_scan">Scan</string>
+    <string name="nav_import">Import</string>
+    <string name="nav_history">History</string>
+    <string name="nav_export">Export</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_total_receipts">Total Receipts</string>
+    <string name="dashboard_total_sales">Total Sales</string>
+    <string name="dashboard_total_vat">Total VAT</string>
+    <string name="dashboard_recent">Recently Processed</string>
+    <string name="dashboard_empty">No receipts yet. Tap Scan or Import to get started.</string>
+
+    <!-- Scan -->
+    <string name="scan_title">Scan Receipt</string>
+    <string name="scan_camera_permission_required">Camera permission is required to scan receipts.</string>
+    <string name="scan_grant_permission">Grant permission</string>
+    <string name="scan_capture">Capture</string>
+    <string name="scan_batch_mode">Batch mode</string>
+    <string name="scan_batch_mode_hint">Keep capturing without leaving the camera. Review all pages afterward.</string>
+    <string name="scan_adjust_crop">Adjust crop</string>
+    <string name="scan_confirm">Use photo</string>
+    <string name="scan_retake">Retake</string>
+
+    <!-- Import -->
+    <string name="import_title">Import Files</string>
+    <string name="import_images">Import images</string>
+    <string name="import_pdf">Import PDF</string>
+    <string name="import_txt">Import TXT receipt</string>
+    <string name="import_selected_count">%1$d file(s) selected</string>
+    <string name="import_start">Start processing</string>
+
+    <!-- Processing -->
+    <string name="processing_title">Processing Receipts</string>
+    <string name="processing_current">Processing %1$d of %2$d</string>
+    <string name="processing_success">Succeeded: %1$d</string>
+    <string name="processing_failed">Failed: %1$d</string>
+    <string name="processing_done">Done</string>
+    <string name="processing_view_results">View results</string>
+    <string name="processing_cancel">Cancel</string>
+
+    <!-- History -->
+    <string name="history_title">Receipt History</string>
+    <string name="history_search_hint">Search by receipt #, seller, TIN…</string>
+    <string name="history_empty">No receipts match your search.</string>
+    <string name="history_duplicate_badge">Possible duplicate</string>
+    <string name="history_delete">Delete</string>
+
+    <!-- Export -->
+    <string name="export_title">Export</string>
+    <string name="export_csv">Export as CSV</string>
+    <string name="export_excel">Export as Excel</string>
+    <string name="export_pdf_report">Export PDF report</string>
+    <string name="export_choose_folder">Choose export folder</string>
+    <string name="export_share">Share</string>
+    <string name="export_success">Exported %1$d receipts to %2$s</string>
+    <string name="export_excel_unavailable">Excel export needs the optional Excel module. See README for setup.</string>
+
+    <!-- Settings -->
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_backup">Backup database</string>
+    <string name="settings_restore">Restore database</string>
+
+    <!-- Common -->
+    <string name="common_cancel">Cancel</string>
+    <string name="common_save">Save</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_error_generic">Something went wrong. Please try again.</string>
+</resources>
