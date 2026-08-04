@@ -24,7 +24,7 @@ import kotlin.math.min
  */
 object ReceiptImageProcessor {
 
-    /** Converts to grayscale, applies adaptive contrast, sharpens, and binarizes. */
+    /** Converts to grayscale, applies adaptive contrast, sharpens, and binarizes via Summed-Area Table adaptive thresholding. */
     fun enhanceForOcr(source: Bitmap): Bitmap {
         val w = source.width
         val h = source.height
@@ -35,7 +35,7 @@ object ReceiptImageProcessor {
         var sum = 0L
         for (v in gray) sum += v
         val avgLuminance = if (gray.isNotEmpty()) (sum / gray.size).toFloat() else 128f
-        val contrast = 1.0f + (255f - avgLuminance) / 255f * 1.5f // Adaptive contrast
+        val contrast = 1.0f + (255f - avgLuminance) / 255f * 1.5f // Adaptive contrast stretch
 
         val grayscaleMatrix = ColorMatrix().apply { setSaturation(0f) }
         val translate = (-0.5f * contrast + 0.5f) * 255f
@@ -53,7 +53,7 @@ object ReceiptImageProcessor {
         canvas.drawBitmap(source, 0f, 0f, paint)
 
         val sharpened = unsharpMask(result)
-        return otsuBinarization(sharpened)
+        return integralAdaptiveThreshold(sharpened, windowRadius = 18, bias = 8)
     }
 
     private fun unsharpMask(src: Bitmap): Bitmap {
@@ -81,52 +81,55 @@ object ReceiptImageProcessor {
         return out
     }
 
-    private fun otsuBinarization(src: Bitmap): Bitmap {
+    /**
+     * Summed-area table (Integral Image) local mean thresholding.
+     * Computes O(1) per-pixel local average luminance to isolate ink strokes
+     * even under heavy shadow gradients on thermal receipts.
+     */
+    private fun integralAdaptiveThreshold(src: Bitmap, windowRadius: Int = 18, bias: Int = 8): Bitmap {
         val w = src.width
         val h = src.height
         val pixels = IntArray(w * h)
         src.getPixels(pixels, 0, w, 0, 0, w, h)
 
-        val histogram = IntArray(256)
-        for (p in pixels) {
-            histogram[Color.red(p)]++
+        val gray = FloatArray(w * h)
+        for (i in pixels.indices) {
+            val p = pixels[i]
+            gray[i] = 0.299f * Color.red(p) + 0.587f * Color.green(p) + 0.114f * Color.blue(p)
         }
 
-        val total = w * h
-        var sum = 0.0
-        for (i in 0..255) sum += i * histogram[i]
-
-        var sumB = 0.0
-        var wB = 0
-        var wF = 0
-        var varMax = 0.0
-        var threshold = 0
-
-        for (i in 0..255) {
-            wB += histogram[i]
-            if (wB == 0) continue
-            wF = total - wB
-            if (wF == 0) break
-
-            sumB += (i * histogram[i]).toDouble()
-            val mB = sumB / wB
-            val mF = (sum - sumB) / wF
-
-            val varBetween = wB.toDouble() * wF.toDouble() * (mB - mF) * (mB - mF)
-            if (varBetween > varMax) {
-                varMax = varBetween
-                threshold = i
+        // Integral image calculation (DoubleArray to prevent overflow)
+        val integral = DoubleArray((w + 1) * (h + 1))
+        for (y in 0 until h) {
+            var rowSum = 0.0
+            for (x in 0 until w) {
+                rowSum += gray[y * w + x]
+                integral[(y + 1) * (w + 1) + (x + 1)] = integral[y * (w + 1) + (x + 1)] + rowSum
             }
         }
 
-        for (i in pixels.indices) {
-            val v = Color.red(pixels[i])
-            pixels[i] = if (v > threshold) Color.WHITE else Color.BLACK
+        fun areaSum(x0: Int, y0: Int, x1: Int, y1: Int): Double {
+            return integral[y1 * (w + 1) + x1] - integral[y0 * (w + 1) + x1] - integral[y1 * (w + 1) + x0] + integral[y0 * (w + 1) + x0]
         }
+
+        for (y in 0 until h) {
+            val y0 = max(0, y - windowRadius)
+            val y1 = min(h, y + windowRadius + 1)
+            for (x in 0 until w) {
+                val x0 = max(0, x - windowRadius)
+                val x1 = min(w, x + windowRadius + 1)
+                val mean = areaSum(x0, y0, x1, y1) / ((x1 - x0) * (y1 - y0))
+                val value = gray[y * w + x]
+                val ink = if (value < mean - bias) Color.BLACK else Color.WHITE
+                pixels[y * w + x] = ink
+            }
+        }
+
         val out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         out.setPixels(pixels, 0, w, 0, 0, w, h)
         return out
     }
+
 
     /**
      * Finds a bounding rectangle around the receipt by scanning rows/columns

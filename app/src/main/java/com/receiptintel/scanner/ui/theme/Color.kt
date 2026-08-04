@@ -2,34 +2,34 @@ package com.receiptintel.scanner.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Deep financial teal brand color palette with gradient tones
-val TealPrimary = Color(0xFF0D5C4D)
-val TealPrimaryLight = Color(0xFF14806C)
-val TealPrimaryDark = Color(0xFF52D6B8)
-val TealContainerLight = Color(0xFFD0F2E9)
-val TealContainerDark = Color(0xFF005143)
-val OnTealContainerLight = Color(0xFF00201A)
-val OnTealContainerDark = Color(0xFF70F3D4)
+// "Graphite & Amber" design system — matching Lovable app styles.css
+val AmberPrimary = Color(0xFFC8842E)
+val AmberPrimaryLight = Color(0xFFE5A04B)
+val AmberPrimaryDark = Color(0xFFECAE5D)
+val AmberContainerLight = Color(0xFFFDE8D0)
+val AmberContainerDark = Color(0xFF422708)
+val OnAmberContainerLight = Color(0xFF331D03)
+val OnAmberContainerDark = Color(0xFFFBDCB4)
 
-// Accent & Status colors
-val Amber = Color(0xFFD97706)
-val AmberDark = Color(0xFFFBBF24)
-val AmberContainer = Color(0xFFFEF3C7)
-val ErrorRed = Color(0xFFDC2626)
-val ErrorRedDark = Color(0xFFFCA5A5)
-val ErrorContainer = Color(0xFFFEE2E2)
-val SuccessGreen = Color(0xFF10B981)
-val SuccessContainer = Color(0xFFD1FAE5)
+// Status & Accent Tokens
+val EmeraldSuccess = Color(0xFF2E9B6E)
+val EmeraldContainer = Color(0xFFD4F3E4)
+val WarningGold = Color(0xFFC09B30)
+val WarningContainer = Color(0xFFFFF7D6)
+val RoseDestructive = Color(0xFFC43D3D)
+val RoseContainer = Color(0xFFFFDEDE)
 
-// Surface & Backgrounds
-val SurfaceLight = Color(0xFFF8FAFC)
-val SurfaceVariantLight = Color(0xFFEEF2F6)
-val OnSurfaceLight = Color(0xFF0F172A)
-val OnSurfaceVariantLight = Color(0xFF475569)
-val OutlineLight = Color(0xFFCBD5E1)
+// Graphite Surfaces & Backgrounds
+val SurfaceLight = Color(0xFFF5F4F0)
+val SurfaceVariantLight = Color(0xFFEBEAE5)
+val OnSurfaceLight = Color(0xFF21232B)
+val OnSurfaceVariantLight = Color(0xFF5E6070)
+val OutlineLight = Color(0xFFD8D7D2)
 
-val SurfaceDark = Color(0xFF0F172A)
-val SurfaceVariantDark = Color(0xFF1E293B)
-val OnSurfaceDark = Color(0xFFF8FAFC)
-val OnSurfaceVariantDark = Color(0xFF94A3B8)
-val OutlineDark = Color(0xFF334155)
+val BackgroundDark = Color(0xFF1B1D26)
+val SurfaceDark = Color(0xFF242633)
+val SurfaceVariantDark = Color(0xFF2B2E3D)
+val OnSurfaceDark = Color(0xFFF5F5F7)
+val OnSurfaceVariantDark = Color(0xFFA0A3B5)
+val OutlineDark = Color(0xFF3D4052)
+

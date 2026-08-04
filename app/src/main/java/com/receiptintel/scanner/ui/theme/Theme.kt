@@ -8,18 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColors = lightColorScheme(
-    primary = TealPrimary,
+    primary = AmberPrimary,
     onPrimary = Color.White,
-    primaryContainer = TealContainerLight,
-    onPrimaryContainer = OnTealContainerLight,
-    secondary = Amber,
+    primaryContainer = AmberContainerLight,
+    onPrimaryContainer = OnAmberContainerLight,
+    secondary = EmeraldSuccess,
     onSecondary = Color.White,
-    secondaryContainer = AmberContainer,
-    error = ErrorRed,
+    secondaryContainer = EmeraldContainer,
+    error = RoseDestructive,
     onError = Color.White,
-    errorContainer = ErrorContainer,
+    errorContainer = RoseContainer,
     background = SurfaceLight,
-    surface = SurfaceLight,
+    surface = Color.White,
     surfaceVariant = SurfaceVariantLight,
     onBackground = OnSurfaceLight,
     onSurface = OnSurfaceLight,
@@ -28,17 +28,17 @@ private val LightColors = lightColorScheme(
 )
 
 private val DarkColors = darkColorScheme(
-    primary = TealPrimaryDark,
-    onPrimary = Color(0xFF00382E),
-    primaryContainer = TealContainerDark,
-    onPrimaryContainer = OnTealContainerDark,
-    secondary = AmberDark,
-    onSecondary = Color(0xFF452B00),
-    secondaryContainer = Color(0xFF653E00),
-    error = ErrorRedDark,
-    onError = Color(0xFF600004),
-    errorContainer = Color(0xFF8C1D18),
-    background = SurfaceDark,
+    primary = AmberPrimaryDark,
+    onPrimary = Color(0xFF261400),
+    primaryContainer = AmberContainerDark,
+    onPrimaryContainer = OnAmberContainerDark,
+    secondary = EmeraldSuccess,
+    onSecondary = Color(0xFF003820),
+    secondaryContainer = Color(0xFF005232),
+    error = RoseDestructive,
+    onError = Color(0xFF3B0505),
+    errorContainer = Color(0xFF5C1212),
+    background = BackgroundDark,
     surface = SurfaceDark,
     surfaceVariant = SurfaceVariantDark,
     onBackground = OnSurfaceDark,
@@ -48,9 +48,7 @@ private val DarkColors = darkColorScheme(
 )
 
 /**
- * @param darkTheme when null, follows the system setting; otherwise this is
- * the user's explicit in-app preference from Settings (persisted via
- * DataStore — see [com.receiptintel.scanner.util.UserPreferences]).
+ * @param darkTheme when null, follows system setting or dark-first default.
  */
 @Composable
 fun ReceiptScannerTheme(
@@ -65,3 +63,4 @@ fun ReceiptScannerTheme(
         content = content
     )
 }
+
