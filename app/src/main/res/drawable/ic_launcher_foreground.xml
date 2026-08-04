@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Receipt document body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,18 L34,90 Q34,94 38,94 L70,94 Q74,94 74,90 L74,18 Q74,14 70,14 L38,14 Q34,14 34,18 Z"/>
+    <!-- Scan line (teal highlight) -->
+    <path
+        android:fillColor="#0F6B5C"
+        android:pathData="M34,50 L74,50 L74,58 L34,58 Z"/>
+    <!-- Receipt lines (grey text simulation) -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M40,30 L68,30 L68,33 L40,33 Z"/>
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M40,38 L60,38 L60,41 L40,41 Z"/>
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M40,65 L68,65 L68,68 L40,68 Z"/>
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M40,73 L56,73 L56,76 L40,76 Z"/>
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M58,73 L68,73 L68,76 L58,76 Z"/>
+</vector>
