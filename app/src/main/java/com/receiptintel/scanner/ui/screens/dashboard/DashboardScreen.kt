@@ -26,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.receiptintel.scanner.R
 import com.receiptintel.scanner.data.local.entity.ReceiptEntity
-import com.receiptintel.scanner.ui.theme.TealPrimary
-import com.receiptintel.scanner.ui.theme.TealPrimaryLight
+import com.receiptintel.scanner.ui.theme.AmberPrimary
+import com.receiptintel.scanner.ui.theme.AmberPrimaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,11 +168,12 @@ private fun HeroBanner(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(TealPrimary, TealPrimaryLight)
+                        colors = listOf(AmberPrimary, AmberPrimaryLight)
                     )
                 )
                 .padding(24.dp)
-        ) {
+        )
+ {
             Column {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
