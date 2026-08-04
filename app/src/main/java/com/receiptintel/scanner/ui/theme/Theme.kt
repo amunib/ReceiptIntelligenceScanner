@@ -10,25 +10,41 @@ import androidx.compose.ui.graphics.Color
 private val LightColors = lightColorScheme(
     primary = TealPrimary,
     onPrimary = Color.White,
-    primaryContainer = TealContainer,
+    primaryContainer = TealContainerLight,
+    onPrimaryContainer = OnTealContainerLight,
     secondary = Amber,
+    onSecondary = Color.White,
+    secondaryContainer = AmberContainer,
     error = ErrorRed,
+    onError = Color.White,
+    errorContainer = ErrorContainer,
     background = SurfaceLight,
     surface = SurfaceLight,
+    surfaceVariant = SurfaceVariantLight,
     onBackground = OnSurfaceLight,
-    onSurface = OnSurfaceLight
+    onSurface = OnSurfaceLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+    outline = OutlineLight
 )
 
 private val DarkColors = darkColorScheme(
     primary = TealPrimaryDark,
-    onPrimary = Color.Black,
-    primaryContainer = TealPrimary,
+    onPrimary = Color(0xFF00382E),
+    primaryContainer = TealContainerDark,
+    onPrimaryContainer = OnTealContainerDark,
     secondary = AmberDark,
+    onSecondary = Color(0xFF452B00),
+    secondaryContainer = Color(0xFF653E00),
     error = ErrorRedDark,
+    onError = Color(0xFF600004),
+    errorContainer = Color(0xFF8C1D18),
     background = SurfaceDark,
     surface = SurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
     onBackground = OnSurfaceDark,
-    onSurface = OnSurfaceDark
+    onSurface = OnSurfaceDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+    outline = OutlineDark
 )
 
 /**

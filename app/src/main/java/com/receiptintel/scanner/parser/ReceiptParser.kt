@@ -46,6 +46,10 @@ object ReceiptParser {
         var t = text.replace("\r\n", "\n").replace('\r', '\n')
         t = t.replace(Regex(""",\s+(?=\d)"""), ",")   // "94, 944" -> "94,944"
         t = t.replace(Regex("""(?<=\d)\s*[Oo](?=\d)"""), "0") // digit O digit -> 0
+        t = t.replace(Regex("""(?<=\d)\s*\|\s*(?=\d)"""), "1") // | -> 1
+        t = t.replace(Regex("""(?<=\d)\s*;\s*(?=\d)"""), ",") // ; -> ,
+        t = t.replace(Regex("""(?<=\d)\s*[S]\s*(?=\d)"""), "5") // S -> 5
+        t = t.replace(Regex("""(?<=\d)\s*\$\s*(?=\d)"""), "8") // $ -> 8
         return t
     }
 }
@@ -115,7 +119,7 @@ object EthiopianFiscalFormat : ReceiptFormat {
             .find(text)?.groupValues?.get(1)
 
     private fun extractReceiptNumber(text: String): String? =
-        Regex("""FS\s*No\.?\s*(\d{4,12})""", RegexOption.IGNORE_CASE)
+        Regex("""(?:FS\s*No\.?|F\.S\s*No\.?|FSNO|FS#|Receipt\s*No\.?|Rec\.\s*No\.?)\s*(\d{4,12})""", RegexOption.IGNORE_CASE)
             .find(text)?.groupValues?.get(1)
 
     /** Returns (date, time) both normalized where possible. */
@@ -150,7 +154,7 @@ object EthiopianFiscalFormat : ReceiptFormat {
             .find(text)?.groupValues?.get(1)?.let { parseAmount(it) }
 
         val taxMatch = Regex(
-            """TAX\s*\d*\s*\(\s*([\d.]+)\s*%\s*\)\s*\*?\s*([\d,]+\.\d{2})""",
+            """(?:TAX|VAT)\s*\d*\s*\(\s*([\d.]+)\s*%\s*\)\s*\*?\s*([\d,]+\.\d{2})""",
             RegexOption.IGNORE_CASE
         ).find(text)
 
@@ -161,7 +165,7 @@ object EthiopianFiscalFormat : ReceiptFormat {
     }
 
     private fun extractTotal(text: String): Double? =
-        Regex("""\bTOTAL\s*\*?\s*([\d,]+\.\d{2})""", RegexOption.IGNORE_CASE)
+        Regex("""\b(?:GRAND\s*TOTAL|NET\s*TOTAL|AMOUNT\s*DUE|Sub\s*Total|TOTAL)\s*\*?\s*([\d,]+\.\d{2})""", RegexOption.IGNORE_CASE)
             .find(text)?.groupValues?.get(1)?.let { parseAmount(it) }
 
     private fun extractPaymentMethod(text: String): String? {
@@ -199,7 +203,7 @@ object EthiopianFiscalFormat : ReceiptFormat {
      */
     private fun extractItems(lines: List<String>): List<ParsedReceiptItem> {
         val qtyLineRegex = Regex("""^([\d,]+\.?\d*)\s*[xX]\s*([\d,]+\.?\d*)$""")
-        val nameLineRegex = Regex("""^(.+?)\s*\*\s*([\d,]+\.\d{2})$""")
+        val nameLineRegex = Regex("""^(.+?)\s*[*\-]?\s*([\d,]+\.\d{2})$""")
 
         val items = mutableListOf<ParsedReceiptItem>()
         var i = 0
@@ -223,5 +227,9 @@ object EthiopianFiscalFormat : ReceiptFormat {
     }
 
     private fun parseAmount(raw: String): Double? =
-        raw.replace(",", "").replace("*", "").trim().toDoubleOrNull()
+        raw.replace(Regex("""(?i)ETB|Br"""), "")
+           .replace(",", "")
+           .replace("*", "")
+           .trim()
+           .toDoubleOrNull()
 }

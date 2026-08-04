@@ -49,18 +49,45 @@ fun ScanScreen(
     var reviewBitmap by remember { mutableStateOf<Bitmap?>(null) }
     val executor = remember { Executors.newSingleThreadExecutor() }
 
-    Column(Modifier.fillMaxSize()) {
-        TopAppBar(title = { Text(stringResource(R.string.scan_title)) })
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    stringResource(R.string.scan_title),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        )
 
         if (!hasCameraPermission) {
             Column(
-                Modifier.fillMaxSize().padding(24.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(stringResource(R.string.scan_camera_permission_required), textAlign = TextAlign.Center)
+                Icon(
+                    Icons.Default.CameraAlt,
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
                 Spacer(Modifier.height(16.dp))
-                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                Text(
+                    stringResource(R.string.scan_camera_permission_required),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Spacer(Modifier.height(24.dp))
+                Button(
+                    onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) },
+                    shape = RoundedCornerShape(12.dp)
+                ) {
                     Text(stringResource(R.string.scan_grant_permission))
                 }
             }
@@ -83,30 +110,44 @@ fun ScanScreen(
                     onRectChanged = { cropRect = it }
                 )
             }
-            Text(
-                stringResource(R.string.scan_adjust_crop),
-                modifier = Modifier.padding(8.dp),
-                style = MaterialTheme.typography.labelLarge
-            )
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text(
+                    stringResource(R.string.scan_adjust_crop),
+                    modifier = Modifier.padding(12.dp),
+                    style = MaterialTheme.typography.labelLarge,
+                    textAlign = TextAlign.Center
+                )
+            }
             Row(
-                Modifier.fillMaxWidth().padding(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                OutlinedButton(onClick = { reviewBitmap = null }) {
+                OutlinedButton(
+                    onClick = { reviewBitmap = null },
+                    shape = RoundedCornerShape(12.dp)
+                ) {
                     Icon(Icons.Default.Close, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.scan_retake))
                 }
-                Button(onClick = {
-                    val bmp = reviewBitmap!!
-                    val cropped = safeCrop(bmp, cropRect)
-                    viewModel.addCapture(cropped)
-                    reviewBitmap = null
-                    if (!viewModel.batchMode) {
-                        viewModel.commitToProcessingQueue()
-                        onBatchReadyForProcessing()
-                    }
-                }) {
+                Button(
+                    onClick = {
+                        val bmp = reviewBitmap!!
+                        val cropped = safeCrop(bmp, cropRect)
+                        viewModel.addCapture(cropped)
+                        reviewBitmap = null
+                        if (!viewModel.batchMode) {
+                            viewModel.commitToProcessingQueue()
+                            onBatchReadyForProcessing()
+                        }
+                    },
+                    shape = RoundedCornerShape(12.dp)
+                ) {
                     Icon(Icons.Default.Check, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.scan_confirm))
@@ -115,11 +156,50 @@ fun ScanScreen(
         } else {
             Box(Modifier.weight(1f).fillMaxWidth()) {
                 CameraPreviewContent(onImageCaptureReady = { imageCapture = it })
+
+                // Receipt Guide Frame Overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 32.dp, vertical = 48.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(16.dp)),
+                        colors = CardDefaults.cardColors(
+                            containerColor = androidx.compose.ui.graphics.Color.Transparent
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(
+                            2.dp,
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                        )
+                    ) {}
+                }
+
+                // Top Hint Chip
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 16.dp),
+                    color = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.6f),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.scan_position_receipt),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = androidx.compose.ui.graphics.Color.White
+                    )
+                }
             }
 
             if (viewModel.captures.isNotEmpty()) {
                 LazyRow(
-                    Modifier.fillMaxWidth().padding(8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(viewModel.captures.size) { index ->
@@ -128,40 +208,63 @@ fun ScanScreen(
                             contentDescription = null,
                             modifier = Modifier
                                 .size(64.dp)
-                                .clip(RoundedCornerShape(8.dp))
+                                .clip(RoundedCornerShape(10.dp))
                         )
                     }
                 }
             }
 
             Row(
-                Modifier.fillMaxWidth().padding(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
-                    Text(stringResource(R.string.scan_batch_mode), style = MaterialTheme.typography.titleMedium)
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        stringResource(R.string.scan_batch_mode),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
+                    )
                     Text(
                         stringResource(R.string.scan_batch_mode_hint),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+                Spacer(Modifier.width(12.dp))
                 Switch(checked = viewModel.batchMode, onCheckedChange = { viewModel.toggleBatchMode() })
             }
 
+            // Redesigned Shutter Button
             Row(
-                Modifier.fillMaxWidth().padding(bottom = 24.dp),
-                horizontalArrangement = Arrangement.Center
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                FloatingActionButton(onClick = {
-                    imageCapture?.captureToBitmap(
-                        executor = executor,
-                        onCaptured = { bitmap -> reviewBitmap = bitmap },
-                        onError = { /* Surface via Snackbar in a production build */ }
+                FilledIconButton(
+                    onClick = {
+                        imageCapture?.captureToBitmap(
+                            executor = executor,
+                            onCaptured = { bitmap -> reviewBitmap = bitmap },
+                            onError = { }
+                        )
+                    },
+                    modifier = Modifier.size(72.dp),
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
+                    shape = RoundedCornerShape(36.dp)
+                ) {
+                    Icon(
+                        Icons.Default.CameraAlt,
+                        contentDescription = stringResource(R.string.scan_capture),
+                        modifier = Modifier.size(32.dp),
+                        tint = androidx.compose.ui.graphics.Color.White
                     )
-                }) {
-                    Icon(Icons.Default.CameraAlt, contentDescription = stringResource(R.string.scan_capture))
                 }
             }
 
@@ -171,7 +274,10 @@ fun ScanScreen(
                         viewModel.commitToProcessingQueue()
                         onBatchReadyForProcessing()
                     },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
                     Text("${stringResource(R.string.processing_title)} (${viewModel.captures.size})")
                 }

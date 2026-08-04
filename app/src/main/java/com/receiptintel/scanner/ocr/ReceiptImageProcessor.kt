@@ -24,16 +24,20 @@ import kotlin.math.min
  */
 object ReceiptImageProcessor {
 
-    /** Converts to grayscale and stretches contrast to push faint shadow gradients toward white. */
+    /** Converts to grayscale, applies adaptive contrast, sharpens, and binarizes. */
     fun enhanceForOcr(source: Bitmap): Bitmap {
-        val result = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
+        val w = source.width
+        val h = source.height
+        val result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
 
-        val grayscaleMatrix = ColorMatrix().apply { setSaturation(0f) }
+        val gray = toLuminance(source)
+        var sum = 0L
+        for (v in gray) sum += v
+        val avgLuminance = if (gray.isNotEmpty()) (sum / gray.size).toFloat() else 128f
+        val contrast = 1.0f + (255f - avgLuminance) / 255f * 1.5f // Adaptive contrast
 
-        // Contrast stretch: pushes mid-tones (shadows) toward white while
-        // keeping dark ink strokes dark, which is what OCR engines respond to best.
-        val contrast = 1.6f
+        val grayscaleMatrix = ColorMatrix().apply { setSaturation(0f) }
         val translate = (-0.5f * contrast + 0.5f) * 255f
         val contrastMatrix = ColorMatrix(
             floatArrayOf(
@@ -47,7 +51,81 @@ object ReceiptImageProcessor {
 
         val paint = Paint().apply { colorFilter = ColorMatrixColorFilter(grayscaleMatrix) }
         canvas.drawBitmap(source, 0f, 0f, paint)
-        return result
+
+        val sharpened = unsharpMask(result)
+        return otsuBinarization(sharpened)
+    }
+
+    private fun unsharpMask(src: Bitmap): Bitmap {
+        val w = src.width
+        val h = src.height
+        val scaled = Bitmap.createScaledBitmap(src, max(1, w / 2), max(1, h / 2), true)
+        val blurred = Bitmap.createScaledBitmap(scaled, w, h, true)
+        scaled.recycle()
+
+        val srcPixels = IntArray(w * h)
+        val blurPixels = IntArray(w * h)
+        src.getPixels(srcPixels, 0, w, 0, 0, w, h)
+        blurred.getPixels(blurPixels, 0, w, 0, 0, w, h)
+        blurred.recycle()
+
+        val amount = 1.5f
+        for (i in srcPixels.indices) {
+            val sR = Color.red(srcPixels[i])
+            val bR = Color.red(blurPixels[i])
+            val r = (sR + (sR - bR) * amount).toInt().coerceIn(0, 255)
+            srcPixels[i] = Color.rgb(r, r, r)
+        }
+        val out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        out.setPixels(srcPixels, 0, w, 0, 0, w, h)
+        return out
+    }
+
+    private fun otsuBinarization(src: Bitmap): Bitmap {
+        val w = src.width
+        val h = src.height
+        val pixels = IntArray(w * h)
+        src.getPixels(pixels, 0, w, 0, 0, w, h)
+
+        val histogram = IntArray(256)
+        for (p in pixels) {
+            histogram[Color.red(p)]++
+        }
+
+        val total = w * h
+        var sum = 0.0
+        for (i in 0..255) sum += i * histogram[i]
+
+        var sumB = 0.0
+        var wB = 0
+        var wF = 0
+        var varMax = 0.0
+        var threshold = 0
+
+        for (i in 0..255) {
+            wB += histogram[i]
+            if (wB == 0) continue
+            wF = total - wB
+            if (wF == 0) break
+
+            sumB += (i * histogram[i]).toDouble()
+            val mB = sumB / wB
+            val mF = (sum - sumB) / wF
+
+            val varBetween = wB.toDouble() * wF.toDouble() * (mB - mF) * (mB - mF)
+            if (varBetween > varMax) {
+                varMax = varBetween
+                threshold = i
+            }
+        }
+
+        for (i in pixels.indices) {
+            val v = Color.red(pixels[i])
+            pixels[i] = if (v > threshold) Color.WHITE else Color.BLACK
+        }
+        val out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        out.setPixels(pixels, 0, w, 0, 0, w, h)
+        return out
     }
 
     /**
@@ -63,7 +141,7 @@ object ReceiptImageProcessor {
 
         val gray = toLuminance(source)
         val backgroundLuminance = estimateBorderLuminance(gray, w, h)
-        val threshold = 30 // luminance delta from background to count as "content"
+        val threshold = 20 // luminance delta from background to count as "content"
 
         var top = 0
         var bottom = h - 1

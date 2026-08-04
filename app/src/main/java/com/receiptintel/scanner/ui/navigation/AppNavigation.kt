@@ -56,7 +56,10 @@ fun AppNavigation(viewModelFactory: AppViewModelFactory) {
             val currentDestination = backStackEntry?.destination
             // Hide the bottom bar on the full-screen Processing step.
             if (currentDestination?.route != PROCESSING_ROUTE) {
-                NavigationBar {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 8.dp
+                ) {
                     bottomDestinations.forEach { dest ->
                         val selected = currentDestination?.hierarchy?.any { it.route == dest.route } == true
                         NavigationBarItem(
@@ -68,8 +71,20 @@ fun AppNavigation(viewModelFactory: AppViewModelFactory) {
                                     restoreState = true
                                 }
                             },
-                            icon = { Icon(dest.icon, contentDescription = null) },
-                            label = { Text(stringResource(dest.labelRes)) }
+                            icon = { Icon(dest.icon, contentDescription = stringResource(dest.labelRes)) },
+                            label = {
+                                Text(
+                                    stringResource(dest.labelRes),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         )
                     }
                 }

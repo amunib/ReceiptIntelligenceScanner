@@ -72,4 +72,30 @@
     <string name="common_save">Save</string>
     <string name="common_delete">Delete</string>
     <string name="common_error_generic">Something went wrong. Please try again.</string>
+
+    <!-- Scan — new strings -->
+    <string name="scan_position_receipt">Position the receipt inside the guide</string>
+    <string name="scan_tip_flat">Tip: lay the receipt flat for best results</string>
+
+    <!-- History — new strings -->
+    <string name="history_swipe_to_delete">Swipe left to delete</string>
+    <string name="history_no_receipts_yet">No receipts yet.\nScan or import one to get started.</string>
+    <string name="history_delete_confirm">Delete receipt?</string>
+    <string name="history_total_label">Total</string>
+
+    <!-- Import — new strings -->
+    <string name="import_images_desc">JPG, PNG — camera photos of receipts</string>
+    <string name="import_pdf_desc">Single or multi-page PDF receipts</string>
+    <string name="import_txt_desc">Plain-text receipt exports</string>
+    <string name="import_clear">Clear selection</string>
+
+    <!-- Export — new strings -->
+    <string name="export_csv_desc">Comma-separated, opens in Excel / Google Sheets</string>
+    <string name="export_excel_desc">Formatted .xlsx spreadsheet</string>
+    <string name="export_all_receipts">All receipts</string>
+    <string name="export_format">Format</string>
+
+    <!-- Processing — new strings -->
+    <string name="processing_scan_complete">Scan complete!</string>
+    <string name="processing_duplicates_found">%1$d possible duplicate(s)</string>
 </resources>

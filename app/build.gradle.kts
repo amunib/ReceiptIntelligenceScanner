@@ -103,6 +103,9 @@ dependencies {
     // Coil for Compose (thumbnail previews of scanned receipts)
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    // Google Fonts for Compose (Inter font; falls back to system font when offline)
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
+
     // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
