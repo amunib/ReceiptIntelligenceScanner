@@ -1,5 +1,7 @@
 package com.receiptintel.scanner.ui.navigation
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Dashboard
@@ -77,7 +79,7 @@ fun AppNavigation(viewModelFactory: AppViewModelFactory) {
         NavHost(
             navController = navController,
             startDestination = Dest.Dashboard.route,
-            modifier = androidx.compose.ui.Modifier.padding(padding)
+            modifier = Modifier.padding(padding)
         ) {
             composable(Dest.Dashboard.route) {
                 val vm: DashboardViewModel = viewModel(factory = viewModelFactory)

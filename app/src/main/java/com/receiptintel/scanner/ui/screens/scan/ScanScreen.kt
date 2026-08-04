@@ -28,6 +28,7 @@ import androidx.camera.core.ImageCapture
 import com.receiptintel.scanner.R
 import java.util.concurrent.Executors
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanScreen(
     viewModel: ScanViewModel,

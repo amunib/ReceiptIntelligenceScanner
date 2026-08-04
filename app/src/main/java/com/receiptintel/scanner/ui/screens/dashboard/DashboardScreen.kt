@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.receiptintel.scanner.R
 import com.receiptintel.scanner.data.local.entity.ReceiptEntity
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
     val state by viewModel.uiState.collectAsState()

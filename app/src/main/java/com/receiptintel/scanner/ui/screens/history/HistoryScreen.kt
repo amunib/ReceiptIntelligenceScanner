@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.receiptintel.scanner.R
 import com.receiptintel.scanner.data.local.entity.ReceiptWithItems
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(viewModel: HistoryViewModel) {
     val query by viewModel.query.collectAsState()
