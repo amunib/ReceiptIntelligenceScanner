@@ -31,37 +31,7 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      # ── 4. Generate mipmap PNG launcher icons (missing from repo) ─────────────
-      #     ubuntu-latest has ImageMagick pre-installed. We generate a simple teal
-      #     square icon at every required density. The mipmap-anydpi-v26/ adaptive
-      #     icons committed to the repo handle API 26+ devices; these PNGs cover
-      #     the API 24-25 fallback that AAPT2 requires to be present.
-      - name: Generate launcher icon PNGs
-        run: |
-          ICON_COLOR="#0F6B5C"   # matches ic_launcher_background
-          RES="app/src/main/res"
-          declare -A SIZES=( [mdpi]=48 [hdpi]=72 [xhdpi]=96 [xxhdpi]=144 [xxxhdpi]=192 )
-          for density in "${!SIZES[@]}"; do
-            size=${SIZES[$density]}
-            dir="$RES/mipmap-$density"
-            mkdir -p "$dir"
-            # Square icon
-            convert -size ${size}x${size} xc:"$ICON_COLOR" \
-              -fill white -font DejaVu-Sans-Bold -pointsize $((size/4)) \
-              -gravity center -annotate 0 "R" \
-              "$dir/ic_launcher.png"
-            # Round icon (circle crop)
-            convert -size ${size}x${size} xc:"$ICON_COLOR" \
-              \( +clone -threshold -1 -negate \
-                 -fill white -draw "circle $((size/2)),$((size/2)) $((size/2)),0" \) \
-              -alpha off -compose CopyOpacity -composite \
-              -fill white -font DejaVu-Sans-Bold -pointsize $((size/4)) \
-              -gravity center -annotate 0 "R" \
-              "$dir/ic_launcher_round.png"
-            echo "✅ Generated $density (${size}px)"
-          done
-
-      # ── 5. Build ─────────────────────────────────────────────────────────────
+      # ── 4. Build ─────────────────────────────────────────────────────────────
       - name: Assemble release APK
         run: gradle assembleRelease
         env:
